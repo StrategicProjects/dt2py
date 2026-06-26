@@ -64,11 +64,26 @@ function render({ model, el }) {
   table.style.width = "100%";
   el.appendChild(table);
 
-  const data = model.get("data") || [];
   const columns = (model.get("columns") || []).map(toColumn);
   const options = model.get("options") || {};
+  const serverSide = !!model.get("server_side");
 
-  const config = Object.assign({ data, columns }, options);
+  // --- server-side processing: ajax as a function over the anywidget Comm ---
+  // The DataTables request is forwarded to Python, which replies with a
+  // matching `dt2_ssp_response`. Correlated by an incrementing requestId.
+  let reqCounter = 0;
+  const pending = new Map();
+  const config = Object.assign({ columns }, options);
+  if (serverSide) {
+    config.serverSide = true;
+    config.ajax = (request, callback) => {
+      const requestId = ++reqCounter;
+      pending.set(requestId, callback);
+      model.send({ dt2_ssp: true, requestId, request });
+    };
+  } else {
+    config.data = model.get("data") || [];
+  }
 
   const dt = new DataTable(table, config);
 
@@ -100,12 +115,23 @@ function render({ model, el }) {
     (e) => pushState(e.type),
   );
 
-  // --- Python -> JS: proxy / custom messages ---
-  const onMsg = (msg) => handleProxy(dt, msg);
+  // --- Python -> JS: proxy commands + SSP responses ---
+  const onMsg = (msg) => {
+    if (msg && msg.dt2_ssp_response) {
+      const cb = pending.get(msg.requestId);
+      if (cb) {
+        pending.delete(msg.requestId);
+        cb(msg.payload);
+      }
+      return;
+    }
+    handleProxy(dt, msg);
+  };
   model.on("msg:custom", onMsg);
 
   return () => {
     model.off("msg:custom", onMsg);
+    pending.clear();
     dt.off(".dt2");
     dt.destroy();
     el.innerHTML = "";

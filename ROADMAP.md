@@ -29,7 +29,8 @@ Shiny transport onto the anywidget Comm.
 - [x] anywidget adapter `js/index.js` (core render + proxy/event skeleton)
 - [x] `Dt2` widget + `dt2()` constructor (pandas/polars/records)
 - [x] Shiny example app
-- [ ] Build bundle, smoke-test render + selection in a real app
+- [x] Build bundle; widget constructs, traits populate, app serves (HTTP 200)
+- [ ] Visual in-browser render + selection (needs Chrome extension online)
 
 ### Phase 1 — config parity
 - [ ] Column helpers (`dt2_cols_*`, formats, ordering) → Python equivalents
@@ -45,11 +46,16 @@ Shiny transport onto the anywidget Comm.
 - [ ] Modular loading parity (only ship what's requested)
 
 ### Phase 3 — Shiny integration
-- [ ] Proxy parity (all `R/dt2_proxy.R` methods)
+- [x] **Server-side processing (de-risked first):** DataTables `ajax` as a
+      function routed over the Comm; `dt2.server.process_ssp` ports the R
+      filter/order/paginate logic (no query-string parse needed — request
+      arrives structured). Widget keeps full data Python-side; `_on_msg`
+      replies with a correlated `dt2_ssp_response`. Unit + handler tests green.
+      **Still to verify:** the live Comm round-trip in a browser (needs frontend).
+- [ ] Proxy parity (remaining `R/dt2_proxy.R` methods; skeleton in place)
 - [ ] Events parity (state, row checkbox/button inline inputs)
 - [ ] Inline inputs (`dt2_inputs`) rendered + wired to reactivity
-- [ ] Server-side processing: DataTables `ajax` as a function routed over the
-      Comm; Python side ports `.dt2_parse_ssp_request` / paging / filtering
+- [ ] Per-column search in SSP (R does global only — match, then optionally extend)
 
 ### Phase 4 — polish & release
 - [ ] Tests (pytest + a JS smoke harness)
