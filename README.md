@@ -1,5 +1,14 @@
 # dt2 — DataTables v2 for Shiny for Python
 
+<!-- badges: start -->
+[![CI](https://github.com/StrategicProjects/dt2py/actions/workflows/ci.yml/badge.svg)](https://github.com/StrategicProjects/dt2py/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/dt2.svg)](https://pypi.org/project/dt2/)
+[![Python versions](https://img.shields.io/pypi/pyversions/dt2.svg)](https://pypi.org/project/dt2/)
+[![Docs](https://img.shields.io/badge/docs-mkdocs--material-blue.svg)](https://strategicprojects.github.io/dt2py/)
+[![License](https://img.shields.io/badge/license-MIT-darkviolet.svg)](LICENSE)
+[![R package: DT2](https://img.shields.io/badge/R%20package-DT2-198CE7.svg?logo=r)](https://github.com/StrategicProjects/DT2)
+<!-- badges: end -->
+
 A Python port of the R [**DT2**](https://github.com/StrategicProjects/DT2)
 package: an [anywidget](https://anywidget.dev) binding for
 [DataTables v2](https://datatables.net), designed for
