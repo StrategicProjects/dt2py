@@ -60,36 +60,63 @@ function toColumn(c) {
   return Object.assign({ defaultContent: "" }, c);
 }
 
-/** R -> Python: proxy commands (mirror of R/dt2_proxy.R). */
+/** Resolve an order column reference (1-based index or header name) to a
+ *  0-based DataTables column index. */
+function resolveOrderCol(dt, col) {
+  if (typeof col === "string") {
+    const idx = dt
+      .columns()
+      .indexes()
+      .toArray()
+      .find((i) => dt.column(i).header().textContent.trim() === col);
+    return idx != null ? idx : 0;
+  }
+  return parseInt(col, 10) - 1;
+}
+
+/** Python -> JS: proxy commands (mirror of R/dt2_proxy.R, `cmd` protocol). */
 function handleProxy(dt, msg) {
-  if (!msg || !msg.method) return;
-  switch (msg.method) {
-    case "reload":
-      dt.ajax.reload(null, msg.resetPaging !== false);
-      break;
-    case "clearSearch":
-      dt.search("").columns().search("").draw();
-      break;
-    case "search":
-      dt.search(msg.value || "").draw();
-      break;
-    case "selectRows": {
-      dt.rows().deselect();
-      (msg.rows || []).forEach((r) => dt.row(r - 1).select());
-      break;
+  const cmd = msg && (msg.cmd || msg.method);
+  if (!cmd) return;
+  try {
+    switch (cmd) {
+      case "replaceData":
+        dt.clear();
+        dt.rows.add(msg.data || []);
+        dt.draw(false);
+        break;
+      case "draw":
+        dt.draw(msg.resetPaging === true);
+        break;
+      case "reload": // server-side re-fetch
+        dt.ajax.reload(null, msg.resetPaging !== false);
+        break;
+      case "order": {
+        const spec = (msg.args && msg.args[0]) || [];
+        dt.order(spec.map(([col, dir]) => [resolveOrderCol(dt, col), dir])).draw();
+        break;
+      }
+      case "search":
+        dt.search(msg.args[0], msg.args[1], msg.args[2], msg.args[3]).draw();
+        break;
+      case "clearSearch":
+        dt.search("").columns().search("").draw();
+        break;
+      case "page":
+        if (msg.args[0] === "number") dt.page(parseInt(msg.args[1], 10) - 1).draw(false);
+        else dt.page(msg.args[0]).draw(false);
+        break;
+      case "selectRows": {
+        if (msg.args[1]) dt.rows().deselect();
+        const zero = (msg.args[0] || []).map((i) => i - 1);
+        dt.rows(zero).select();
+        break;
+      }
+      default:
+        console.warn("[dt2] unknown proxy cmd:", cmd);
     }
-    case "selectPage":
-      dt.page(msg.page - 1).draw("page");
-      break;
-    case "updateData":
-      dt.clear();
-      dt.rows.add(msg.data || []).draw(false);
-      break;
-    case "reloadData":
-      dt.draw(msg.resetPaging !== false);
-      break;
-    default:
-      console.warn("[dt2] unknown proxy method:", msg.method);
+  } catch (e) {
+    console.error("[dt2] proxy", cmd, "failed:", e);
   }
 }
 
@@ -144,6 +171,12 @@ function render({ model, el }) {
     }
   }
 
+  // Event traits dedupe by value, but DataTables can fire the "same" event
+  // twice (e.g. clicking an already-selected row). A monotonic seq guarantees
+  // the trait changes every time, so Shiny's reactive_read always re-fires —
+  // the anywidget equivalent of Shiny's {priority:"event"} inputs.
+  let seq = 0;
+
   // --- JS -> Python: selection ---
   const pushSelection = () => {
     const rows = dt
@@ -156,21 +189,37 @@ function render({ model, el }) {
   };
   dt.on("select.dt2 deselect.dt2", pushSelection);
 
-  // --- JS -> Python: table state (search / order / page) ---
-  const pushState = (type) => {
+  // --- JS -> Python: rich table state (mirror of dt2.js pushState) ---
+  const pushState = (reason) => {
+    let selected = [];
+    try { selected = dt.rows({ selected: true }).indexes().toArray(); } catch (e) { /* no Select */ }
     model.set("state", {
-      type,
-      search: dt.search(),
+      reason,
       order: dt.order(),
-      page: dt.page(),
-      pageLength: dt.page.len(),
+      search: dt.search(),
+      page: dt.page.info(),
+      selected,
+      _seq: ++seq,
     });
     model.save_changes();
   };
   dt.on(
-    "draw.dt2 order.dt2 search.dt2 page.dt2",
+    "draw.dt2 order.dt2 search.dt2 page.dt2 select.dt2 deselect.dt2",
     (e) => pushState(e.type),
   );
+
+  // --- JS -> Python: delegated inline row inputs (checkbox / button) ---
+  const $tbl = $(table);
+  $tbl.on("change.dt2inputs", "input.dt2-row-checkbox", function () {
+    const row = dt.row($(this).closest("tr")).index();
+    model.set("row_check", { row: row + 1, value: this.checked, _seq: ++seq });
+    model.save_changes();
+  });
+  $tbl.on("click.dt2inputs", "button.dt2-row-button", function () {
+    const row = dt.row($(this).closest("tr")).index();
+    model.set("row_button", { row: row + 1, id: this.id, _seq: ++seq });
+    model.save_changes();
+  });
 
   // --- Python -> JS: proxy commands + SSP responses ---
   const onMsg = (msg) => {
@@ -189,6 +238,7 @@ function render({ model, el }) {
   return () => {
     model.off("msg:custom", onMsg);
     pending.clear();
+    $tbl.off(".dt2inputs");
     dt.off(".dt2");
     dt.destroy();
     el.innerHTML = "";

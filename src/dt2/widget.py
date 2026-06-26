@@ -39,6 +39,8 @@ class Dt2(anywidget.AnyWidget):
     # JS -> Python (events) — read these reactively in Shiny via reactive_read()
     selected_rows = traitlets.List(default_value=[]).tag(sync=True)
     state = traitlets.Dict(default_value={}).tag(sync=True)
+    row_check = traitlets.Dict(default_value={}).tag(sync=True)  # {row, value, _seq}
+    row_button = traitlets.Dict(default_value={}).tag(sync=True)  # {row, id, _seq}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         # Full dataset kept Python-side for server-side processing — deliberately
@@ -62,28 +64,51 @@ class Dt2(anywidget.AnyWidget):
         )
 
     # ---- proxy API (Python -> JS), mirrors R/dt2_proxy.R ----
-    def proxy_reload(self, reset_paging: bool = True) -> None:
-        self.send({"method": "reload", "resetPaging": reset_paging})
-
-    def proxy_clear_search(self) -> None:
-        self.send({"method": "clearSearch"})
-
-    def proxy_search(self, value: str) -> None:
-        self.send({"method": "search", "value": value})
-
-    def proxy_select_rows(self, rows: Sequence[int]) -> None:
-        self.send({"method": "selectRows", "rows": list(rows)})
-
-    def proxy_update_data(self, data: Any) -> None:
-        """Replace the table data. For server-side tables this swaps the
-        Python-side dataset and asks the client to re-fetch."""
+    # The widget *is* the proxy here (no separate id/session like in R/Shiny);
+    # call these methods on the rendered widget instance.
+    def replace_data(self, data: Any) -> None:
+        """Replace all table data. For server-side tables this swaps the
+        Python-side dataset and triggers a client re-fetch instead."""
         rows, cols = _rows(data)
         if self.server_side:
             self._full_data = rows
             self._col_names = cols or self._col_names
-            self.send({"method": "reload", "resetPaging": False})
+            self.send({"cmd": "reload", "resetPaging": False})
         else:
-            self.send({"method": "updateData", "data": rows})
+            self.send({"cmd": "replaceData", "data": rows})
+
+    def draw(self, reset_paging: bool = False) -> None:
+        self.send({"cmd": "draw", "resetPaging": reset_paging})
+
+    def reload(self, reset_paging: bool = True) -> None:
+        """Re-fetch a server-side table."""
+        self.send({"cmd": "reload", "resetPaging": reset_paging})
+
+    def order(self, *specs: Sequence[Any]) -> None:
+        """Reorder. Each spec is ``(col, "asc"|"desc")``; col is a 1-based index
+        or a column header name (resolved client-side)."""
+        self.send({"cmd": "order", "args": [[list(s) for s in specs]]})
+
+    def search(
+        self,
+        value: str,
+        regex: bool = False,
+        smart: bool = True,
+        case_insensitive: bool = True,
+    ) -> None:
+        self.send({"cmd": "search", "args": [value, regex, smart, case_insensitive]})
+
+    def clear_search(self) -> None:
+        self.send({"cmd": "clearSearch"})
+
+    def page(self, action: Union[str, int] = "first", number: Optional[int] = None) -> None:
+        """Navigate paging. ``action`` in first/previous/next/last/number; for
+        'number', pass a 1-based ``number``."""
+        self.send({"cmd": "page", "args": [action, number]})
+
+    def select_rows(self, indexes: Sequence[int], reset: bool = True) -> None:
+        """Select rows by 1-based index (Select extension)."""
+        self.send({"cmd": "selectRows", "args": [list(indexes), bool(reset)]})
 
 
 def _col_data_names(columns: Sequence[ColumnSpec]) -> list[str]:

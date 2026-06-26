@@ -69,9 +69,17 @@ Shiny transport onto the anywidget Comm.
       arrives structured). Widget keeps full data Python-side; `_on_msg`
       replies with a correlated `dt2_ssp_response`. Unit + handler tests green.
       **Still to verify:** the live Comm round-trip in a browser (needs frontend).
-- [ ] Proxy parity (remaining `R/dt2_proxy.R` methods; skeleton in place)
-- [ ] Events parity (state, row checkbox/button inline inputs)
-- [ ] Inline inputs (`dt2_inputs`) rendered + wired to reactivity
+- [x] **Proxy parity** (`cmd` protocol mirroring R/dt2_proxy.R): widget methods
+      `replace_data`, `draw`, `reload`, `order`, `search`, `clear_search`,
+      `page`, `select_rows`. Order resolves header names → indices client-side.
+- [x] **Events parity**: enriched `state` ({reason, order, search, page,
+      selected}) + `selected_rows`; a monotonic `_seq` makes event traits
+      re-fire under `reactive_read` (anywidget equivalent of Shiny's
+      `priority:"event"`).
+- [x] **Inline inputs** (port of R/dt2_inputs.R): `Options.col_checkbox` /
+      `col_button` render delegated controls; clicks set `row_check` /
+      `row_button` event traits. Verified in node (render compiles, seeds
+      checked state) + 12 tests (58 total). Example `app_proxy_inputs.py`.
 - [ ] Per-column search in SSP (R does global only — match, then optionally extend)
 
 ### Phase 4 — polish & release

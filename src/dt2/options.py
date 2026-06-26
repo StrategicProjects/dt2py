@@ -427,6 +427,56 @@ class Options(dict):
             self["dt2_buttons_target"] = target
         return self
 
+    # ---- inline row inputs (port of R/dt2_inputs.R) ----
+    def col_checkbox(
+        self,
+        col: ColRef,
+        *,
+        input_id_prefix: str = "row_chk_",
+        value_col: Optional[Union[str, int]] = None,
+    ) -> "Options":
+        """Render a checkbox per row in ``col``. Clicks set the widget's
+        ``row_check`` event ({row, value}). ``value_col`` seeds the initial
+        checked state from another column (name or 1-based index)."""
+        if value_col is None:
+            value_js = "false"
+        else:
+            if isinstance(value_col, str):
+                name = value_col
+                idx0 = (self._columns.index(name) if name in self._columns else 0)
+            else:
+                idx0 = int(value_col) - 1
+                name = self._columns[idx0] if 0 <= idx0 < len(self._columns) else ""
+            value_js = "(Array.isArray(row) ? row[%d] : row[%s])" % (idx0, json.dumps(name))
+        code = (
+            "function(d,t,row,meta){ if(t!=='display') return d;"
+            " var rid='%s'+(meta.row+1);"
+            " var checked=%s?' checked':'';"
+            " return '<input type=\"checkbox\" class=\"dt2-row-checkbox form-check-input\" id=\"'+rid+'\"'+checked+'/>'; }"
+            % (input_id_prefix, value_js)
+        )
+        return self._add_defs(self._idx(col), render=JS(code))
+
+    def col_button(
+        self,
+        col: ColRef,
+        *,
+        label: str = "Action",
+        input_id_prefix: str = "row_btn_",
+        button_class: str = "dt2-row-button btn btn-sm btn-primary",
+    ) -> "Options":
+        """Render an action button per row in ``col``. Clicks set the widget's
+        ``row_button`` event ({row, id})."""
+        import html as _html
+
+        code = (
+            "function(d,t,row,meta){ if(t!=='display') return d;"
+            " var rid='%s'+(meta.row+1);"
+            " return '<button type=\"button\" class=\"%s\" id=\"'+rid+'\">%s</button>'; }"
+            % (input_id_prefix, button_class, _html.escape(label))
+        )
+        return self._add_defs(self._idx(col), render=JS(code))
+
 
 def register_renderer(name: str, js: JS) -> str:
     """Register a named JS renderer for later use via Options.use_renderer."""
