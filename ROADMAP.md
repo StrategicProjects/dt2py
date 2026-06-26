@@ -32,11 +32,19 @@ Shiny transport onto the anywidget Comm.
 - [x] Build bundle; widget constructs, traits populate, app serves (HTTP 200)
 - [ ] Visual in-browser render + selection (needs Chrome extension online)
 
-### Phase 1 — config parity
-- [ ] Column helpers (`dt2_cols_*`, formats, ordering) → Python equivalents
-- [ ] Name→index resolution (port `.dt2_name_to_idx`, with warnings)
-- [ ] Quote-safe value handling (Python serializes to JSON natively — verify)
-- [ ] Options builder covering the R `dt2_options` surface
+### Phase 1 — config parity ✅
+- [x] `Options` builder (chainable) covering the R `dt2_options`/`dt2_formats`
+      surface: `order`, `search_global`, `length_menu`, `language`, `use_buttons`,
+      `cols_align/width/hide/escape`, `format_number/datetime/number_abbrev/time_relative`,
+      `cols_render`, `cols_render_orthogonal`, `register/use_renderer`.
+- [x] Name→index resolution (`_name_to_idx`, ported with warnings); seed names
+      from a DataFrame/records via `Options(df)` — removes the R "forgot to set
+      options$columns" footgun.
+- [x] **`JS()` parity for `htmlwidgets::JS()`:** Python marks renderer source as
+      `{"__dt2_js__": code}`; `index.js` `reviveJs()` recursively compiles markers
+      into functions with `DataTable`/`$`/`moment` in scope. Proven in node.
+- [x] `dt2(df, options=opts, **kw)` merge. 22 unit tests + JS revive test green.
+- [x] Quote-safe values via `json.dumps` (`_js_str`, port of `.dt2_js_str`).
 
 ### Phase 2 — extensions
 - [ ] Add npm extension deps (buttons, select, responsive, fixedheader,

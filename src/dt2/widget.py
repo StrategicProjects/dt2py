@@ -123,8 +123,9 @@ def dt2(
     data: Any,
     columns: Optional[Sequence[ColumnSpec]] = None,
     *,
+    options: Optional[dict] = None,
     server_side: bool = False,
-    **options: Any,
+    **kwoptions: Any,
 ) -> Dt2:
     """Create a :class:`Dt2` table from a DataFrame or list of records.
 
@@ -135,17 +136,24 @@ def dt2(
     columns:
         Optional explicit column spec (names or DataTables column dicts). When
         omitted, columns are inferred from ``data``.
+    options:
+        A dict or :class:`dt2.options.Options` of DataTables options. Merged
+        with any keyword options (the keyword options win on conflict).
     server_side:
         When True, the data stays Python-side and DataTables fetches pages over
         the Comm (filter/order/paginate handled by :func:`dt2.server.process_ssp`).
         Use for large tables.
-    **options:
-        Passed through verbatim as DataTables options (1:1 with the JS API),
-        matching the R package's plain-list convention.
+    **kwoptions:
+        Extra DataTables options passed verbatim (1:1 with the JS API), matching
+        the R package's plain-list convention.
     """
     rows, inferred = _rows(data)
     cols: list[ColumnSpec] = list(columns) if columns is not None else list(inferred)
     col_names = _col_data_names(cols)
+
+    merged: dict[str, Any] = dict(options or {})
+    merged.update(kwoptions)
+    options = merged
 
     if server_side:
         return Dt2(

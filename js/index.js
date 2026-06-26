@@ -17,6 +17,41 @@ import $ from "jquery";
 import DataTable from "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 
+const JS_MARKER = "__dt2_js__";
+
+/** Compile a `{__dt2_js__: code}` marker into a function, with DataTable/$/moment
+ *  in scope (DataTable is a module import here, not a global like in the R build).
+ *  Trust boundary: `code` is supplied by the app author via dt2.JS(...) — the same
+ *  trust level as the app's own Python — never end-user input. This mirrors
+ *  htmlwidgets::JS()/DT in R; it is not an injection sink for untrusted data. */
+function compileJs(code) {
+  try {
+    // eslint-disable-next-line no-new-func
+    return new Function(
+      "DataTable",
+      "$",
+      "moment",
+      "return (" + code + ");",
+    )(DataTable, $, typeof window !== "undefined" ? window.moment : undefined);
+  } catch (e) {
+    console.error("[dt2] failed to compile JS renderer:", code, e);
+    return undefined;
+  }
+}
+
+/** Recursively revive JS() markers anywhere in the config (mirror of
+ *  htmlwidgets::JS handling). Real functions/values pass through untouched. */
+function reviveJs(value) {
+  if (Array.isArray(value)) return value.map(reviveJs);
+  if (value && typeof value === "object") {
+    if (typeof value[JS_MARKER] === "string") return compileJs(value[JS_MARKER]);
+    const out = {};
+    for (const k of Object.keys(value)) out[k] = reviveJs(value[k]);
+    return out;
+  }
+  return value;
+}
+
 /** Normalize a column spec entry into a DataTables column definition. */
 function toColumn(c) {
   if (typeof c === "string") return { data: c, title: c, defaultContent: "" };
@@ -64,8 +99,8 @@ function render({ model, el }) {
   table.style.width = "100%";
   el.appendChild(table);
 
-  const columns = (model.get("columns") || []).map(toColumn);
-  const options = model.get("options") || {};
+  const columns = (model.get("columns") || []).map(toColumn).map(reviveJs);
+  const options = reviveJs(model.get("options") || {});
   const serverSide = !!model.get("server_side");
 
   // --- server-side processing: ajax as a function over the anywidget Comm ---
