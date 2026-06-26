@@ -4,13 +4,27 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dt2"
-version = "0.0.1.dev0"
+version = "0.1.0"
 description = "DataTables v2 for Shiny for Python — anywidget binding, Python port of the R DT2 package"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.9"
 authors = [{ name = "André Leite", email = "leite@de.ufpe.br" }]
 keywords = ["datatables", "shiny", "anywidget", "tables", "htmlwidgets"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Framework :: Jupyter",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
 dependencies = [
     "anywidget>=0.9",
     "traitlets>=5",
@@ -24,6 +38,8 @@ dev = ["anywidget[dev]", "watchfiles", "pytest"]
 
 [project.urls]
 Homepage = "https://github.com/StrategicProjects/dt2py"
+Changelog = "https://github.com/StrategicProjects/dt2py/blob/main/CHANGELOG.md"
+Issues = "https://github.com/StrategicProjects/dt2py/issues"
 "R package" = "https://github.com/StrategicProjects/DT2"
 
 [tool.hatch.build.targets.wheel]

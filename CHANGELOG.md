@@ -3,10 +3,11 @@
 All notable changes to **dt2** (the Python port) are documented here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com).
 
-## [Unreleased]
+## [0.1.0] — 2026-06-26
 
-Initial development toward feature parity with the R
-[DT2](https://github.com/StrategicProjects/DT2) package.
+First release. Feature parity with the R
+[DT2](https://github.com/StrategicProjects/DT2) package, verified live in a
+browser (Shiny for Python).
 
 ### Added
 - **Core widget** (`dt2()`, `Dt2`): anywidget binding for DataTables v2 (2.3.4),
