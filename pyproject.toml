@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dt2"
+version = "0.0.1.dev0"
+description = "DataTables v2 for Shiny for Python — anywidget binding, Python port of the R DT2 package"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [{ name = "André Leite", email = "leite@de.ufpe.br" }]
+keywords = ["datatables", "shiny", "anywidget", "tables", "htmlwidgets"]
+dependencies = [
+    "anywidget>=0.9",
+    "traitlets>=5",
+]
+
+[project.optional-dependencies]
+shiny = ["shiny>=1.2", "shinywidgets>=0.4"]
+pandas = ["pandas"]
+polars = ["polars"]
+dev = ["anywidget[dev]", "watchfiles", "pytest"]
+
+[project.urls]
+Homepage = "https://github.com/StrategicProjects/dt2py"
+"R package" = "https://github.com/StrategicProjects/DT2"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dt2"]
+
+# The JS bundle is produced by `npm run build` into src/dt2/static/.
+# It is committed so `pip install` works without a Node toolchain.
+[tool.hatch.build]
+artifacts = ["src/dt2/static/*"]
