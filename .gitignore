@@ -10,3 +10,6 @@ site/
 .Rhistory
 *.tsbuildinfo
 src/dt2/static/index.js.map
+
+# Local agent instructions (not versioned)
+CLAUDE.md
