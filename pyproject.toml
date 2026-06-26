@@ -35,6 +35,11 @@ shiny = ["shiny>=1.2", "shinywidgets>=0.4"]
 pandas = ["pandas"]
 polars = ["polars"]
 dev = ["anywidget[dev]", "watchfiles", "pytest"]
+docs = [
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.26",
+    "black",  # pretty-prints rendered signatures
+]
 
 [project.urls]
 Homepage = "https://github.com/StrategicProjects/dt2py"

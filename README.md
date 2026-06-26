@@ -8,6 +8,9 @@ package: an [anywidget](https://anywidget.dev) binding for
 It configures DataTables via plain Python (1:1 with the JS API), reusing the
 same DataTables runtime (2.3.4) and extensions as the R package.
 
+📖 **Documentation:** <https://strategicprojects.github.io/dt2py/> ·
+📦 **PyPI:** <https://pypi.org/project/dt2/>
+
 > Status: **feature-complete toward R parity, pre-release.** Config, all 15
 > extensions, server-side processing, proxy, events and inline inputs are
 > implemented and unit-tested. The live in-browser Comm transport has not yet
