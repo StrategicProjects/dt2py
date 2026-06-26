@@ -33,3 +33,7 @@ packages = ["src/dt2"]
 # It is committed so `pip install` works without a Node toolchain.
 [tool.hatch.build]
 artifacts = ["src/dt2/static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

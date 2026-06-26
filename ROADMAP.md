@@ -83,10 +83,19 @@ Shiny transport onto the anywidget Comm.
 - [ ] Per-column search in SSP (R does global only — match, then optionally extend)
 
 ### Phase 4 — polish & release
-- [ ] Tests (pytest + a JS smoke harness)
-- [ ] Docs site / examples gallery
-- [ ] CI (build JS, run tests), commit built bundle
-- [ ] PyPI publish (`dt2`)
+- [x] Tests: 58 pytest cases (config, extensions, SSP, proxy/inputs) + node
+      smoke checks for the JS adapter. `[tool.pytest.ini_options]` configured.
+- [x] CI (`.github/workflows/ci.yml`): builds the JS bundle, asserts the
+      committed `src/dt2/static` is fresh, installs and runs pytest on Python
+      3.9/3.11/3.13; syntax-checks the adapter sources.
+- [x] Wheel verified: includes the built bundle; fresh `pip install` works with
+      no Node toolchain (703kb bundle, 15 extensions, widget builds).
+- [x] Release workflow (`release.yml`): builds + publishes to PyPI via Trusted
+      Publishing on a published GitHub Release (maintainer-triggered).
+- [x] README (full API), CHANGELOG, examples gallery (5 runnable apps).
+- [ ] **PyPI publish** — maintainer action: configure the PyPI trusted publisher,
+      then publish a GitHub Release to trigger `release.yml`.
+- [ ] Live in-browser verification (Chrome extension was offline).
 
 ## Open questions
 - Bundle size: shipping all extensions vs. lazy/optional extras. Lean toward
