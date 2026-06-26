@@ -34,4 +34,7 @@ jobs:
           python -m build
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        # Pinned to a commit SHA (not a moving branch/tag) — this step runs with
+        # id-token: write (PyPI publish rights), so a hijacked ref must not be
+        # able to execute here. SHA is v1.14.0.
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
