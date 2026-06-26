@@ -19,6 +19,11 @@ import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 // Register all DataTables extensions onto the shared DataTable (side effects).
 import "./extensions.js";
 
+// DataTables reports warnings via a blocking alert() by default, which freezes
+// the whole tab (and the browser-automation channel). Route them to throw so
+// problems surface in the console instead of a modal dialog.
+DataTable.ext.errMode = "throw";
+
 const JS_MARKER = "__dt2_js__";
 
 /** Compile a `{__dt2_js__: code}` marker into a function, with DataTable/$/moment

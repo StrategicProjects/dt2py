@@ -29,9 +29,21 @@ Initial development toward feature parity with the R
 - **Events**: `selected_rows`, `state`, `row_check`, `row_button` traits
   (read reactively with `shinywidgets.reactive_read`).
 - **Inline inputs**: `Options.col_checkbox`, `Options.col_button`.
+- **moment.js bundled** — powers `format_datetime` and `format_time_relative`
+  (`DataTable.render.datetime` requires it).
+
+### Fixed
+- Verified end to end in a real browser (Shiny for Python): core render,
+  selection events, SSP (50k rows: render + server-side search), config
+  renderers (number/datetime/custom), extensions (RowGroup, Buttons), and inline
+  inputs with `row_check`/`row_button` events.
+- `format_datetime` failed ("Formatted date without Moment.js or Luxon"), which
+  surfaced as a blocking `alert()` — moment is now bundled and DataTables'
+  `errMode` is set to `throw` so future warnings log instead of freezing the tab.
+- `Options.buttons()` now places buttons in the layout when no `target` is given,
+  so they actually render (DataTables 2.x only shows buttons referenced there).
 
 ### Known gaps / deferred
-- Live in-browser Comm transport not yet visually verified.
 - PDF export (pdfmake) not bundled; `format_time_relative` needs
-  moment-with-locales; extensions are all-bundled (no modular/lazy loading yet);
-  SSP search is global-only (matches R).
+  moment-with-locales for non-`en` locales; extensions are all-bundled (no
+  modular/lazy loading yet); SSP search is global-only (matches R).

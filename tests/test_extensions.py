@@ -86,6 +86,19 @@ def test_buttons_default_set():
     assert "excelHtml5" in o["buttons"]
 
 
+def test_buttons_without_target_placed_in_layout():
+    # DataTables 2.x only shows buttons referenced in the layout.
+    o = opts().buttons(["copyHtml5"])
+    assert o["layout"]["topStart"] == "buttons"
+    assert "dt2_buttons_target" not in o
+
+
+def test_buttons_with_target_skips_layout():
+    o = opts().buttons(["copyHtml5"], target="#toolbar")
+    assert o["dt2_buttons_target"] == "#toolbar"
+    assert "layout" not in o
+
+
 def test_chaining_multiple_extensions():
     o = (
         opts()

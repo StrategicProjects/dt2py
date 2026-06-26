@@ -93,9 +93,13 @@ Shiny transport onto the anywidget Comm.
 - [x] Release workflow (`release.yml`): builds + publishes to PyPI via Trusted
       Publishing on a published GitHub Release (maintainer-triggered).
 - [x] README (full API), CHANGELOG, examples gallery (5 runnable apps).
+- [x] **Live in-browser verification** (Shiny for Python): core render +
+      selection, SSP (50k rows: render + search), config renderers
+      (number/datetime/custom badge), extensions (RowGroup + Buttons), and
+      inline inputs with row_check/row_button events — all confirmed. Two bugs
+      found & fixed: moment.js now bundled (datetime), buttons placed in layout.
 - [ ] **PyPI publish** — maintainer action: configure the PyPI trusted publisher,
       then publish a GitHub Release to trigger `release.yml`.
-- [ ] Live in-browser verification (Chrome extension was offline).
 
 ## Open questions
 - Bundle size: shipping all extensions vs. lazy/optional extras. Lean toward

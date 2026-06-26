@@ -424,7 +424,11 @@ class Options(dict):
         not bundled."""
         self["buttons"] = list(buttons)
         if target is not None:
+            # JS relocates the rendered container to this selector after init.
             self["dt2_buttons_target"] = target
+        else:
+            # DataTables 2.x only shows buttons referenced in the layout.
+            self.setdefault("layout", {}).setdefault("topStart", "buttons")
         return self
 
     # ---- inline row inputs (port of R/dt2_inputs.R) ----

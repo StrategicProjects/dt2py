@@ -13,6 +13,11 @@
 import JSZip from "jszip";
 if (typeof window !== "undefined" && !window.JSZip) window.JSZip = JSZip;
 
+// --- moment powers DataTable.render.datetime and format_time_relative.
+//     Core moment only (locale 'en'); moment-with-locales is a deferred extra. ---
+import moment from "moment";
+if (typeof window !== "undefined" && !window.moment) window.moment = moment;
+
 // --- Buttons (core + bs5 bridge + button types) ---
 import "datatables.net-buttons-bs5";
 import "datatables.net-buttons/js/buttons.colVis.mjs";
