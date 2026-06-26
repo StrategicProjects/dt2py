@@ -46,12 +46,21 @@ Shiny transport onto the anywidget Comm.
 - [x] `dt2(df, options=opts, **kw)` merge. 22 unit tests + JS revive test green.
 - [x] Quote-safe values via `json.dumps` (`_js_str`, port of `.dt2_js_str`).
 
-### Phase 2 — extensions
-- [ ] Add npm extension deps (buttons, select, responsive, fixedheader,
-      fixedcolumns, rowgroup, rowreorder, colreorder, keytable, scroller,
-      searchbuilder, searchpanes, staterestore, columncontrol, datetime)
-- [ ] jszip/pdfmake/moment for Buttons export
-- [ ] Modular loading parity (only ship what's requested)
+### Phase 2 — extensions ✅
+- [x] All 15 extensions bundled via esbuild (`js/extensions.js`): Buttons,
+      Select, Responsive, FixedHeader, FixedColumns, KeyTable, Scroller,
+      RowGroup, RowReorder, ColReorder, DateTime, SearchBuilder, SearchPanes,
+      StateRestore, ColumnControl. Verified present in the built bundle.
+- [x] jszip bundled (Excel/CSV/copy export via `window.JSZip`).
+- [x] Python activation helpers on `Options`: `select/responsive/fixed_header/
+      fixed_columns/key_table/col_reorder/row_reorder/row_group/scroller/
+      search_panes/search_builder/state_restore/column_control/buttons`, plus
+      `extensions()` registry (parity with R `dt2_extensions()`).
+- [x] `buttons(target=...)` relocation (port of R `dt2_buttons`) handled in JS.
+- [x] `_momentLocale` applied client-side. 15 extension tests green (46 total).
+- [ ] **Deferred follow-ups:** pdfmake (PDF export, ~1MB) as an optional extra;
+      moment-with-locales for `format_time_relative`; modular/lazy loading so the
+      base wheel ships only requested extensions (parity with R's per-ext loading).
 
 ### Phase 3 — Shiny integration
 - [x] **Server-side processing (de-risked first):** DataTables `ajax` as a

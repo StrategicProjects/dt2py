@@ -357,6 +357,76 @@ class Options(dict):
             raise KeyError(f"Renderer {name!r} is not registered.")
         return self._add_defs(self._idx(cols), render=js)
 
+    # ---- extension activation (Phase 2) ----
+    # Each sets the DataTables option the bundled extension reads. Accept True or
+    # a config dict (1:1 with the extension's option), matching the R convention.
+    def _set(self, key: str, value: Any) -> "Options":
+        self[key] = value
+        return self
+
+    def select(self, value: Union[bool, dict] = True) -> "Options":
+        return self._set("select", value)
+
+    def responsive(self, value: Union[bool, dict] = True) -> "Options":
+        return self._set("responsive", value)
+
+    def fixed_header(self, value: Union[bool, dict] = True) -> "Options":
+        return self._set("fixedHeader", value)
+
+    def fixed_columns(self, value: Union[bool, dict] = True) -> "Options":
+        return self._set("fixedColumns", value)
+
+    def key_table(self, value: Union[bool, dict] = True) -> "Options":
+        return self._set("keys", value)
+
+    def col_reorder(self, value: Union[bool, dict] = True) -> "Options":
+        return self._set("colReorder", value)
+
+    def row_reorder(self, value: Union[bool, dict] = True) -> "Options":
+        return self._set("rowReorder", value)
+
+    def row_group(self, data_src: Union[str, int, dict]) -> "Options":
+        """Group rows by a column. Pass a column data-key/index or a full
+        rowGroup config dict."""
+        cfg = data_src if isinstance(data_src, dict) else {"dataSrc": data_src}
+        return self._set("rowGroup", cfg)
+
+    def scroller(self, scroll_y: str = "400px", value: Union[bool, dict] = True) -> "Options":
+        """Virtual scrolling. Requires scrollY; deferRender is enabled for it."""
+        self["scrollY"] = scroll_y
+        self["deferRender"] = True
+        return self._set("scroller", value)
+
+    def search_panes(self, value: Union[bool, dict] = True) -> "Options":
+        return self._set("searchPanes", value)
+
+    def search_builder(self, value: Union[bool, dict] = True) -> "Options":
+        return self._set("searchBuilder", value)
+
+    def state_restore(self, value: Union[bool, dict] = True) -> "Options":
+        self["stateSave"] = True
+        return self._set("stateRestore", value)
+
+    def column_control(self, value: Any = True) -> "Options":
+        return self._set("columnControl", value)
+
+    def buttons(
+        self,
+        buttons: Sequence[Any] = ("copyHtml5", "csvHtml5", "excelHtml5", "print"),
+        *,
+        target: Optional[str] = None,
+    ) -> "Options":
+        """Configure Buttons with full button ids/objects (port of R dt2_buttons).
+
+        ``target`` is an optional CSS selector to relocate the rendered buttons
+        container after init. For the simpler layout-based case use
+        :meth:`use_buttons`. PDF export (``pdfHtml5``) needs pdfmake, which is
+        not bundled."""
+        self["buttons"] = list(buttons)
+        if target is not None:
+            self["dt2_buttons_target"] = target
+        return self
+
 
 def register_renderer(name: str, js: JS) -> str:
     """Register a named JS renderer for later use via Options.use_renderer."""
@@ -364,3 +434,33 @@ def register_renderer(name: str, js: JS) -> str:
         raise TypeError("js must be a dt2.JS(...) instance.")
     _RENDERERS[name] = js
     return name
+
+
+# Extensions bundled in index.js (all activate via their option). Versions match
+# the npm packages pinned in package.json. Mirrors R's .dt2_extension_registry().
+_EXTENSIONS: list[dict] = [
+    {"name": "Buttons", "version": "3.2.4", "option": "buttons"},
+    {"name": "Select", "version": "3.1.0", "option": "select"},
+    {"name": "Responsive", "version": "3.0.6", "option": "responsive"},
+    {"name": "FixedHeader", "version": "4.0.3", "option": "fixedHeader"},
+    {"name": "FixedColumns", "version": "5.0.5", "option": "fixedColumns"},
+    {"name": "KeyTable", "version": "2.12.1", "option": "keys"},
+    {"name": "Scroller", "version": "2.4.3", "option": "scroller"},
+    {"name": "RowGroup", "version": "1.6.0", "option": "rowGroup"},
+    {"name": "RowReorder", "version": "1.5.0", "option": "rowReorder"},
+    {"name": "ColReorder", "version": "2.1.1", "option": "colReorder"},
+    {"name": "DateTime", "version": "1.6.0", "option": None},
+    {"name": "SearchBuilder", "version": "1.8.4", "option": "searchBuilder"},
+    {"name": "SearchPanes", "version": "2.3.5", "option": "searchPanes"},
+    {"name": "StateRestore", "version": "1.4.2", "option": "stateRestore"},
+    {"name": "ColumnControl", "version": "1.2.1", "option": "columnControl"},
+]
+
+
+def extensions() -> list[dict]:
+    """List bundled DataTables extensions (parity with R ``dt2_extensions()``).
+
+    All are bundled in the JS asset and activate via their option (set with the
+    corresponding ``Options`` helper). PDF export (pdfmake) is not bundled.
+    """
+    return [dict(e) for e in _EXTENSIONS]

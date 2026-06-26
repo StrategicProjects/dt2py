@@ -16,6 +16,8 @@
 import $ from "jquery";
 import DataTable from "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+// Register all DataTables extensions onto the shared DataTable (side effects).
+import "./extensions.js";
 
 const JS_MARKER = "__dt2_js__";
 
@@ -103,6 +105,15 @@ function render({ model, el }) {
   const options = reviveJs(model.get("options") || {});
   const serverSide = !!model.get("server_side");
 
+  // dt2-only directives, not DataTables options — pull them out of the config.
+  const buttonsTarget = options.dt2_buttons_target;
+  const momentLocale = options._momentLocale;
+  delete options.dt2_buttons_target;
+  delete options._momentLocale;
+  if (momentLocale && typeof window !== "undefined" && window.moment) {
+    try { window.moment.locale(momentLocale); } catch (e) { /* ignore */ }
+  }
+
   // --- server-side processing: ajax as a function over the anywidget Comm ---
   // The DataTables request is forwarded to Python, which replies with a
   // matching `dt2_ssp_response`. Correlated by an incrementing requestId.
@@ -121,6 +132,17 @@ function render({ model, el }) {
   }
 
   const dt = new DataTable(table, config);
+
+  // Relocate the Buttons container to a custom selector (port of dt2_buttons target).
+  if (buttonsTarget && dt.buttons) {
+    try {
+      const node = dt.buttons().container();
+      const dest = document.querySelector(buttonsTarget);
+      if (node && dest) dest.appendChild(node instanceof Element ? node : node[0]);
+    } catch (e) {
+      console.warn("[dt2] could not move buttons to", buttonsTarget, e);
+    }
+  }
 
   // --- JS -> Python: selection ---
   const pushSelection = () => {

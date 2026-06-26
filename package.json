@@ -10,7 +10,23 @@
   },
   "dependencies": {
     "datatables.net-bs5": "2.3.4",
-    "jquery": "3.7.1"
+    "datatables.net-buttons-bs5": "^3.2.4",
+    "datatables.net-colreorder-bs5": "^2.1.1",
+    "datatables.net-columncontrol-bs5": "^1.2.1",
+    "datatables.net-datetime": "^1.6.0",
+    "datatables.net-fixedcolumns-bs5": "^5.0.5",
+    "datatables.net-fixedheader-bs5": "^4.0.3",
+    "datatables.net-keytable-bs5": "^2.12.1",
+    "datatables.net-responsive-bs5": "^3.0.6",
+    "datatables.net-rowgroup-bs5": "^1.6.0",
+    "datatables.net-rowreorder-bs5": "^1.5.0",
+    "datatables.net-scroller-bs5": "^2.4.3",
+    "datatables.net-searchbuilder-bs5": "^1.8.4",
+    "datatables.net-searchpanes-bs5": "^2.3.5",
+    "datatables.net-select-bs5": "^3.1.0",
+    "datatables.net-staterestore-bs5": "^1.4.2",
+    "jquery": "3.7.1",
+    "jszip": "^3.10.1"
   },
   "devDependencies": {
     "esbuild": "^0.25.0"
