@@ -1,4 +1,4 @@
-# dt2 — DataTables v2 for Shiny for Python
+# dt2 — DataTables v2 for Shiny for Python <img src="docs/assets/logo.svg" align="right" height="139" alt="dt2 hex logo" />
 
 <!-- badges: start -->
 [![CI](https://github.com/StrategicProjects/dt2py/actions/workflows/ci.yml/badge.svg)](https://github.com/StrategicProjects/dt2py/actions/workflows/ci.yml)

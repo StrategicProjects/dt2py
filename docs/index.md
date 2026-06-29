@@ -1,5 +1,9 @@
 # dt2
 
+<p align="center">
+  <img src="assets/logo.svg" alt="dt2 hex logo" width="200">
+</p>
+
 **DataTables v2 for Shiny for Python** — an [anywidget](https://anywidget.dev)
 binding for [DataTables v2](https://datatables.net), and the Python port of the R
 [**DT2**](https://github.com/StrategicProjects/DT2) package.
