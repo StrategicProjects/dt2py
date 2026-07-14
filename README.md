@@ -7,6 +7,7 @@
 [![Docs](https://img.shields.io/badge/docs-mkdocs--material-blue.svg)](https://strategicprojects.github.io/dt2py/)
 [![License](https://img.shields.io/badge/license-MIT-darkviolet.svg)](LICENSE)
 [![R package: DT2](https://img.shields.io/badge/R%20package-DT2-198CE7.svg?logo=r)](https://github.com/StrategicProjects/DT2)
+[![DOI](https://zenodo.org/badge/1281441113.svg)](https://doi.org/10.5281/zenodo.21365753)
 <!-- badges: end -->
 
 A Python port of the R [**DT2**](https://github.com/StrategicProjects/DT2)

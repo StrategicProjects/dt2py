@@ -5,6 +5,7 @@ title: "dt2: DataTables v2 for Shiny for Python (anywidget binding)"
 version: 0.1.1
 date-released: 2026-07-14
 license: MIT
+doi: 10.5281/zenodo.21365753
 repository-code: "https://github.com/StrategicProjects/dt2py"
 url: "https://strategicprojects.github.io/dt2py/"
 keywords:
