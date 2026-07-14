@@ -4,6 +4,11 @@
   <img src="assets/logo.svg" alt="dt2 hex logo" width="200">
 </p>
 
+<p align="center">
+  <a href="https://pypi.org/project/dt2/"><img src="https://img.shields.io/pypi/v/dt2.svg" alt="PyPI"></a>
+  <a href="https://doi.org/10.5281/zenodo.21365753"><img src="https://zenodo.org/badge/1281441113.svg" alt="DOI"></a>
+</p>
+
 **DataTables v2 for Shiny for Python** — an [anywidget](https://anywidget.dev)
 binding for [DataTables v2](https://datatables.net), and the Python port of the R
 [**DT2**](https://github.com/StrategicProjects/DT2) package.
