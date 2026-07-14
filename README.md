@@ -128,6 +128,14 @@ Python kernel over the anywidget Comm, bridged to Shiny reactivity by
 `shinywidgets`. The `htmlwidgets::JS()` mechanism becomes the `JS()` marker +
 client-side reviver. See the header of `js/index.js` for the full mapping.
 
+## Authors
+
+- **André Leite** (maintainer) — Universidade Federal de Pernambuco
+- **Hugo Vasconcelos** — Universidade Federal de Pernambuco
+- **Diogo Bezerra** — Universidade Federal de Pernambuco
+- **Marcos Wasiliew**
+- **Carlos Amorim** — Universidade Federal de Pernambuco
+
 ## License
 
 MIT © André Leite

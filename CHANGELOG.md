@@ -3,6 +3,13 @@
 All notable changes to **dt2** (the Python port) are documented here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com).
 
+## [0.1.1] — 2026-07-14
+
+### Changed
+- Metadata: complete author list with corrected spellings and affiliations
+  (pyproject.toml, README).
+- Added `CITATION.cff` and `.zenodo.json` for Zenodo archival and DOI minting.
+
 ## [0.1.0] — 2026-06-26
 
 First release. Feature parity with the R

@@ -1,0 +1,40 @@
+{
+  "title": "dt2: DataTables v2 for Shiny for Python (anywidget binding)",
+  "description": "<p>dt2 is the Python port of the R DT2 package: an anywidget binding for DataTables v2, designed for Shiny for Python and usable in Jupyter. It configures DataTables via plain Python (1:1 with the JS API), reusing the same DataTables runtime (2.3.4) and extensions as the R package, and supports the full feature set: a chainable Options builder, all 15 DataTables extensions, server-side processing, a Python-to-table proxy, table events, and inline row inputs.</p>",
+  "upload_type": "software",
+  "license": "MIT",
+  "creators": [
+    {
+      "name": "Leite, André",
+      "affiliation": "Universidade Federal de Pernambuco"
+    },
+    {
+      "name": "Vasconcelos, Hugo",
+      "affiliation": "Universidade Federal de Pernambuco"
+    },
+    {
+      "name": "Bezerra, Diogo",
+      "affiliation": "Universidade Federal de Pernambuco"
+    },
+    {
+      "name": "Wasiliew, Marcos"
+    },
+    {
+      "name": "Amorim, Carlos",
+      "affiliation": "Universidade Federal de Pernambuco"
+    }
+  ],
+  "keywords": ["datatables", "shiny", "anywidget", "tables", "htmlwidgets", "python"],
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://pypi.org/project/dt2/",
+      "resource_type": "software"
+    },
+    {
+      "relation": "isDerivedFrom",
+      "identifier": "https://github.com/StrategicProjects/DT2",
+      "resource_type": "software"
+    }
+  ]
+}
