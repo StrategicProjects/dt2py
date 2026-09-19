@@ -222,7 +222,12 @@ function render({ model, el }) {
       selected,
       rows_all,
       rows_current,
-      rows_selected: oneBased(selected),
+      // server-side: `selected` holds page-local offsets -> map via rows_current
+      rows_selected: serverSide
+        ? (Array.isArray(rows_current)
+            ? selected.map((i) => rows_current[i]).filter((v) => v != null)
+            : null)
+        : oneBased(selected),
       _seq: ++seq,
     });
     model.save_changes();
@@ -231,6 +236,10 @@ function render({ model, el }) {
     "draw.dt2 order.dt2 search.dt2 page.dt2 select.dt2 deselect.dt2",
     (e) => pushState(e.type),
   );
+  // Client-side tables draw synchronously inside `new DataTable()`, before the
+  // handler above exists: publish the initial state now. Server-side tables
+  // get theirs from the first ajax draw.
+  if (!serverSide) pushState("init");
 
   // --- JS -> Python: delegated inline row inputs (checkbox / button) ---
   const $tbl = $(table);
