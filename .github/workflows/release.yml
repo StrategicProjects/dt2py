@@ -5,6 +5,10 @@ name: Release to PyPI
 on:
   release:
     types: [published]
+  # Manual re-run from main, for when a release-triggered publish fails for a
+  # reason that needs a workflow fix (a `release` run always uses the workflow
+  # file at the tagged commit). Publishes whatever version main declares.
+  workflow_dispatch:
 
 jobs:
   build-and-publish:
@@ -36,5 +40,6 @@ jobs:
       - name: Publish to PyPI
         # Pinned to a commit SHA (not a moving branch/tag) — this step runs with
         # id-token: write (PyPI publish rights), so a hijacked ref must not be
-        # able to execute here. SHA is v1.14.0.
-        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
+        # able to execute here. SHA is v1.14.2 (Twine 7: needed for the
+        # Metadata-Version 2.5 that current hatchling emits).
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
