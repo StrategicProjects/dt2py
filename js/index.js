@@ -198,12 +198,31 @@ function render({ model, el }) {
   const pushState = (reason) => {
     let selected = [];
     try { selected = dt.rows({ selected: true }).indexes().toArray(); } catch (e) { /* no Select */ }
+    // 1-based row indices (mirror of DT2's input$<id>_rows_*):
+    // rows_all = rows surviving global + column filters, rows_current = current page
+    const oneBased = (a) => (a || []).map((i) => i + 1);
+    let rows_all = null, rows_current = null;
+    try {
+      if (serverSide) {
+        // the client only holds the current page: process_ssp() ships the
+        // indices in the response unless rows_all=False
+        const json = dt.ajax && dt.ajax.json ? dt.ajax.json() : null;
+        if (json && Array.isArray(json.dt2_rows_all)) rows_all = json.dt2_rows_all;
+        if (json && Array.isArray(json.dt2_rows_current)) rows_current = json.dt2_rows_current;
+      } else {
+        rows_all = oneBased(dt.rows({ search: "applied" }).indexes().toArray());
+        rows_current = oneBased(dt.rows({ search: "applied", page: "current" }).indexes().toArray());
+      }
+    } catch (e) { /* noop */ }
     model.set("state", {
       reason,
       order: dt.order(),
       search: dt.search(),
       page: dt.page.info(),
       selected,
+      rows_all,
+      rows_current,
+      rows_selected: oneBased(selected),
       _seq: ++seq,
     });
     model.save_changes();

@@ -24,12 +24,20 @@ def process_ssp(
     request: dict,
     rows: Sequence[dict],
     columns: Sequence[str],
+    rows_all: bool = True,
 ) -> dict:
     """Filter, order and paginate ``rows`` per a DataTables SSP ``request``.
 
     Mirrors :func:`dt2_ssp_handler` in the R package: global case-insensitive
     substring search across all columns, cascading stable sort (last order key
     applied first), then paging. Returns the DataTables payload.
+
+    When ``rows_all`` is True (default) the payload also carries
+    ``dt2_rows_all`` / ``dt2_rows_current``: the 1-based indices (into
+    ``rows``) of every row surviving the filter, and of the current page.
+    The frontend forwards them to ``state["rows_all"]`` /
+    ``state["rows_current"]``. Pass ``rows_all=False`` on very large tables to
+    skip shipping the full index vector on every draw.
     """
     draw = int(request.get("draw", 1) or 1)
     start = max(0, int(request.get("start", 0) or 0))
@@ -40,15 +48,17 @@ def process_ssp(
     order = request.get("order") or []
     cols = list(columns)
 
-    result = list(rows)
+    # Carry the original 1-based row number alongside each row so the
+    # indices survive filtering and sorting (like `idx` in the R handler).
+    result = list(enumerate(rows, start=1))
     total = len(result)
 
     # --- global search: case-insensitive substring across all columns ---
     if search_value:
         pat = search_value.lower()
         result = [
-            r
-            for r in result
+            (i, r)
+            for i, r in result
             if any(pat in str(r.get(c, "")).lower() for c in cols)
         ]
 
@@ -65,22 +75,28 @@ def process_ssp(
         name = cols[col_idx]
         descending = str(o.get("dir", "asc")).lower().startswith("desc")
         try:
-            result = sorted(result, key=lambda r: _sort_key(r.get(name)), reverse=descending)
+            result = sorted(result, key=lambda ir: _sort_key(ir[1].get(name)), reverse=descending)
         except TypeError:
             # mixed types in the column → fall back to string comparison
             result = sorted(
                 result,
-                key=lambda r: (r.get(name) is None, str(r.get(name))),
+                key=lambda ir: (ir[1].get(name) is None, str(ir[1].get(name))),
                 reverse=descending,
             )
+
+    all_idx = [i for i, _ in result]
 
     # --- paginate (length < 0 means "all", per the DataTables convention) ---
     if length >= 0:
         result = result[start : start + length]
 
-    return {
+    payload = {
         "draw": draw,
         "recordsTotal": total,
         "recordsFiltered": filtered,
-        "data": result,
+        "data": [r for _, r in result],
     }
+    if rows_all:
+        payload["dt2_rows_all"] = all_idx
+        payload["dt2_rows_current"] = [i for i, _ in result]
+    return payload
