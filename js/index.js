@@ -198,12 +198,39 @@ function render({ model, el }) {
   const pushState = (reason) => {
     let selected = [];
     try { selected = dt.rows({ selected: true }).indexes().toArray(); } catch (e) { /* no Select */ }
+    // 1-based row indices (mirror of DT2's input$<id>_rows_*):
+    // rows_all = rows surviving global + column filters, rows_current = current page
+    const oneBased = (a) => (a || []).map((i) => i + 1);
+    let rows_all = null, rows_current = null;
+    try {
+      if (serverSide) {
+        // the client only holds the current page: process_ssp() ships the
+        // indices in the response unless rows_all=False. order/search/page
+        // fire BEFORE the round-trip (dt.ajax.json() is still the previous
+        // response), so report the lists as unknown until the `draw` follows.
+        const preDraw = reason === "order" || reason === "search" || reason === "page";
+        const json = dt.ajax && dt.ajax.json ? dt.ajax.json() : null;
+        if (json && !preDraw && Array.isArray(json.dt2_rows_all)) rows_all = json.dt2_rows_all;
+        if (json && !preDraw && Array.isArray(json.dt2_rows_current)) rows_current = json.dt2_rows_current;
+      } else {
+        rows_all = oneBased(dt.rows({ search: "applied" }).indexes().toArray());
+        rows_current = oneBased(dt.rows({ search: "applied", page: "current" }).indexes().toArray());
+      }
+    } catch (e) { /* noop */ }
     model.set("state", {
       reason,
       order: dt.order(),
       search: dt.search(),
       page: dt.page.info(),
       selected,
+      rows_all,
+      rows_current,
+      // server-side: `selected` holds page-local offsets -> map via rows_current
+      rows_selected: serverSide
+        ? (Array.isArray(rows_current)
+            ? selected.map((i) => rows_current[i]).filter((v) => v != null)
+            : null)
+        : oneBased(selected),
       _seq: ++seq,
     });
     model.save_changes();
@@ -212,6 +239,10 @@ function render({ model, el }) {
     "draw.dt2 order.dt2 search.dt2 page.dt2 select.dt2 deselect.dt2",
     (e) => pushState(e.type),
   );
+  // Client-side tables draw synchronously inside `new DataTable()`, before the
+  // handler above exists: publish the initial state now. Server-side tables
+  // get theirs from the first ajax draw.
+  if (!serverSide) pushState("init");
 
   // --- JS -> Python: delegated inline row inputs (checkbox / button) ---
   const $tbl = $(table);

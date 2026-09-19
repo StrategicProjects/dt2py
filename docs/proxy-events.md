@@ -34,10 +34,41 @@ The widget exposes event traits; read them with `shinywidgets.reactive_read`:
 from shinywidgets import reactive_read
 
 reactive_read(tbl.widget, "selected_rows")  # [1-based indices]
-reactive_read(tbl.widget, "state")          # {reason, order, search, page, selected}
+reactive_read(tbl.widget, "state")          # {reason, order, search, page, selected,
+                                            #  rows_all, rows_current, rows_selected}
 reactive_read(tbl.widget, "row_check")      # {row, value}  (inline checkbox)
 reactive_read(tbl.widget, "row_button")     # {row, id}     (inline button)
 ```
+
+### Which rows are visible?
+
+`state` carries three 1-based index lists, named after the R package's
+`input$<id>_rows_*` inputs (and DT's):
+
+| Key             | Contents                                                    |
+|-----------------|-------------------------------------------------------------|
+| `rows_all`      | rows surviving the current filters (global + column search) |
+| `rows_current`  | rows on the current page                                    |
+| `rows_selected` | selected rows (Select extension)                            |
+
+They refresh on every draw, so ColumnControl filters are reflected too.
+Typical use: summarise or export exactly what the user filtered:
+
+```python
+@render.text
+def summary():
+    st = reactive_read(tbl.widget, "state") or {}
+    idx = st.get("rows_all")
+    sub = df if idx is None else df.iloc[[i - 1 for i in idx]]
+    return f"{len(sub)} rows after filtering"
+```
+
+With `server_side=True` the indices come from the Python response; pass
+`rows_all=False` to `dt2()` on very large tables to skip sending the full
+index list on every draw (the keys are then `None`). In server-side mode the
+lists are `None` in the `order` / `search` / `page` snapshots that precede the
+round-trip and are filled by the `draw` that follows; `rows_selected` covers
+the rows of the current page.
 
 !!! note "Why events re-fire"
     Each event payload carries a monotonic `_seq`. Traits dedupe by value, so

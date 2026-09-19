@@ -83,3 +83,31 @@ def test_none_values_sort_last():
 def test_length_negative_returns_all():
     out = process_ssp(req(length=-1), ROWS, COLS)
     assert len(out["data"]) == 5
+
+
+def test_rows_all_and_current_indices():
+    # filter "a" -> Ada, Alan, Grace, Margaret (rows 1,2,3,5); order year desc
+    out = process_ssp(
+        req(search={"value": "a"}, order=[{"column": 2, "dir": "desc"}], length=2),
+        ROWS,
+        COLS,
+    )
+    assert out["recordsFiltered"] == 4
+    # Margaret 1936, Grace 1906, Alan 1912 -> desc: 1936, 1912, 1906, 1815
+    assert out["dt2_rows_all"] == [5, 2, 3, 1]
+    assert out["dt2_rows_current"] == [5, 2]
+    assert [r["name"] for r in out["data"]] == ["Margaret", "Alan"]
+
+    page2 = process_ssp(
+        req(search={"value": "a"}, order=[{"column": 2, "dir": "desc"}], start=2, length=2),
+        ROWS,
+        COLS,
+    )
+    assert page2["dt2_rows_current"] == [3, 1]
+
+
+def test_rows_all_disabled():
+    out = process_ssp(req(), ROWS, COLS, rows_all=False)
+    assert "dt2_rows_all" not in out
+    assert "dt2_rows_current" not in out
+    assert len(out["data"]) == 5

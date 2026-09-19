@@ -3,6 +3,17 @@
 All notable changes to **dt2** (the Python port) are documented here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com).
 
+## [Unreleased]
+
+### Added
+- `state` now includes `rows_all`, `rows_current` and `rows_selected`
+  (1-based row indices), mirroring the R package's `input$<id>_rows_*`
+  inputs (StrategicProjects/DT2#20). `rows_all` reflects global and column
+  filters (including ColumnControl).
+- `process_ssp()` and `dt2()` gain `rows_all` (default True): server-side
+  responses ship `dt2_rows_all` / `dt2_rows_current` so the keys above also
+  work with `server_side=True`; set False on very large tables.
+
 ## [0.1.1] — 2026-07-14
 
 ### Changed

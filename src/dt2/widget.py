@@ -38,6 +38,8 @@ class Dt2(anywidget.AnyWidget):
 
     # JS -> Python (events) — read these reactively in Shiny via reactive_read()
     selected_rows = traitlets.List(default_value=[]).tag(sync=True)
+    # state = {reason, order, search, page, selected (0-based),
+    #          rows_all, rows_current, rows_selected (1-based), _seq}
     state = traitlets.Dict(default_value={}).tag(sync=True)
     row_check = traitlets.Dict(default_value={}).tag(sync=True)  # {row, value, _seq}
     row_button = traitlets.Dict(default_value={}).tag(sync=True)  # {row, id, _seq}
@@ -47,6 +49,8 @@ class Dt2(anywidget.AnyWidget):
         # NOT a synced trait (the whole point of SSP is to not ship it all).
         self._full_data: list[dict] = kwargs.pop("_full_data", []) or []
         self._col_names: list[str] = kwargs.pop("_col_names", []) or []
+        # Whether SSP responses carry dt2_rows_all / dt2_rows_current
+        self._rows_all: bool = bool(kwargs.pop("_rows_all", True))
         super().__init__(*args, **kwargs)
         self.on_msg(self._on_msg)
 
@@ -54,7 +58,12 @@ class Dt2(anywidget.AnyWidget):
     def _on_msg(self, _widget: Any, content: Any, _buffers: Any) -> None:
         if not isinstance(content, dict) or not content.get("dt2_ssp"):
             return
-        payload = process_ssp(content.get("request", {}), self._full_data, self._col_names)
+        payload = process_ssp(
+            content.get("request", {}),
+            self._full_data,
+            self._col_names,
+            rows_all=self._rows_all,
+        )
         self.send(
             {
                 "dt2_ssp_response": True,
@@ -150,6 +159,7 @@ def dt2(
     *,
     options: Optional[dict] = None,
     server_side: bool = False,
+    rows_all: bool = True,
     **kwoptions: Any,
 ) -> Dt2:
     """Create a :class:`Dt2` table from a DataFrame or list of records.
@@ -168,6 +178,12 @@ def dt2(
         When True, the data stays Python-side and DataTables fetches pages over
         the Comm (filter/order/paginate handled by :func:`dt2.server.process_ssp`).
         Use for large tables.
+    rows_all:
+        Server-side only. When True (default) each response also carries the
+        1-based indices of the filtered rows and of the current page, so
+        ``state["rows_all"]`` / ``state["rows_current"]`` work as in
+        client-side mode. Set False on very large tables to avoid shipping
+        the full index vector on every draw (those keys are then ``None``).
     **kwoptions:
         Extra DataTables options passed verbatim (1:1 with the JS API), matching
         the R package's plain-list convention.
@@ -188,5 +204,6 @@ def dt2(
             server_side=True,
             _full_data=rows,
             _col_names=col_names,
+            _rows_all=rows_all,
         )
     return Dt2(data=rows, columns=cols, options=options)
