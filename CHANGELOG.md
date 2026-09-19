@@ -3,7 +3,7 @@
 All notable changes to **dt2** (the Python port) are documented here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com).
 
-## [Unreleased]
+## [0.1.2] — 2026-09-19
 
 ### Added
 - `state` now includes `rows_all`, `rows_current` and `rows_selected`
