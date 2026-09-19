@@ -65,7 +65,10 @@ def summary():
 
 With `server_side=True` the indices come from the Python response; pass
 `rows_all=False` to `dt2()` on very large tables to skip sending the full
-index list on every draw (the keys are then `None`).
+index list on every draw (the keys are then `None`). In server-side mode the
+lists are `None` in the `order` / `search` / `page` snapshots that precede the
+round-trip and are filled by the `draw` that follows; `rows_selected` covers
+the rows of the current page.
 
 !!! note "Why events re-fire"
     Each event payload carries a monotonic `_seq`. Traits dedupe by value, so

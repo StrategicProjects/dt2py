@@ -205,10 +205,13 @@ function render({ model, el }) {
     try {
       if (serverSide) {
         // the client only holds the current page: process_ssp() ships the
-        // indices in the response unless rows_all=False
+        // indices in the response unless rows_all=False. order/search/page
+        // fire BEFORE the round-trip (dt.ajax.json() is still the previous
+        // response), so report the lists as unknown until the `draw` follows.
+        const preDraw = reason === "order" || reason === "search" || reason === "page";
         const json = dt.ajax && dt.ajax.json ? dt.ajax.json() : null;
-        if (json && Array.isArray(json.dt2_rows_all)) rows_all = json.dt2_rows_all;
-        if (json && Array.isArray(json.dt2_rows_current)) rows_current = json.dt2_rows_current;
+        if (json && !preDraw && Array.isArray(json.dt2_rows_all)) rows_all = json.dt2_rows_all;
+        if (json && !preDraw && Array.isArray(json.dt2_rows_current)) rows_current = json.dt2_rows_current;
       } else {
         rows_all = oneBased(dt.rows({ search: "applied" }).indexes().toArray());
         rows_current = oneBased(dt.rows({ search: "applied", page: "current" }).indexes().toArray());
