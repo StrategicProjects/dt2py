@@ -136,6 +136,7 @@ client-side reviver. See the header of `js/index.js` for the full mapping.
 - **Diogo Bezerra** — Universidade Federal de Pernambuco
 - **Marcos Wasiliew**
 - **Carlos Amorim** — Universidade Federal de Pernambuco
+- **Júlia Nascimento Barreto**
 
 ## License
 
