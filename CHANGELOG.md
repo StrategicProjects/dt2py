@@ -3,6 +3,19 @@
 All notable changes to **dt2** (the Python port) are documented here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com).
 
+## [Unreleased]
+
+### Added
+- `THIRD-PARTY-NOTICES`: versions, copyright holders and license notices of
+  the code in the pre-built bundle (DataTables and its extensions by SpryMedia
+  Ltd, jQuery, JSZip with pako, Moment.js, FileSaver.js, Lucide icons). It is
+  declared in `license-files`, so it ships in the sdist and in the wheel.
+
+### Changed
+- README: names SpryMedia Ltd as the developer of DataTables, lists every
+  bundled library with its copyright holder and license, and states that dt2
+  is not affiliated with or endorsed by SpryMedia Ltd.
+
 ## [0.1.2] — 2026-09-19
 
 ### Added

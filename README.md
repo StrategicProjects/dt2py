@@ -18,6 +18,12 @@ package: an [anywidget](https://anywidget.dev) binding for
 It configures DataTables via plain Python (1:1 with the JS API), reusing the
 same DataTables runtime (2.3.4) and extensions as the R package.
 
+[DataTables](https://datatables.net) is developed by
+[SpryMedia Ltd](https://sprymedia.co.uk/) and MIT licensed; all table
+rendering, ordering, searching, paging and the extensions are its work. dt2 is
+an independent binding and is not affiliated with, sponsored by or endorsed by
+SpryMedia Ltd. See [License and third-party code](#license-and-third-party-code).
+
 📖 **Documentation:** <https://strategicprojects.github.io/dt2py/> ·
 📦 **PyPI:** <https://pypi.org/project/dt2/>
 
@@ -138,6 +144,25 @@ client-side reviver. See the header of `js/index.js` for the full mapping.
 - **Carlos Amorim** — Universidade Federal de Pernambuco
 - **Júlia Nascimento Barreto**
 
-## License
+## License and third-party code
 
-MIT © André Leite
+MIT © André Leite (see [`LICENSE`](LICENSE)).
+
+The package ships a pre-built JavaScript/CSS bundle (`src/dt2/static/`) that
+contains third-party code, which remains the copyright of its authors:
+
+| Component (bundled version) | Copyright holder | License |
+|---|---|---|
+| [DataTables](https://datatables.net/) 2.3.4 and 15 extensions (Buttons, ColReorder, ColumnControl, DateTime, FixedColumns, FixedHeader, KeyTable, Responsive, RowGroup, RowReorder, Scroller, SearchBuilder, SearchPanes, Select, StateRestore), with their Bootstrap 5 integration files | SpryMedia Ltd | MIT |
+| [jQuery](https://jquery.com/) 3.7.1 | OpenJS Foundation and other contributors | MIT |
+| [JSZip](https://stuk.github.io/jszip/) 3.10.1 (includes [pako](https://github.com/nodeca/pako)) | Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso | MIT (dual MIT / GPL-3.0, used under MIT) |
+| [Moment.js](https://momentjs.com/) 2.30.1 | JS Foundation and other contributors | MIT |
+| [FileSaver.js](https://github.com/eligrey/FileSaver.js) 1.3.3 (inside Buttons) | Eli Grey | MIT |
+| [Lucide](https://lucide.dev/) icons (inside ColumnControl) | Lucide Contributors; Cole Bemis (Feather) | ISC / MIT |
+
+Exact versions and the full license notices are in
+[`THIRD-PARTY-NOTICES`](THIRD-PARTY-NOTICES), which is included in the sdist
+and in the wheel.
+
+dt2 is not affiliated with, sponsored by or endorsed by SpryMedia Ltd.
+DataTables is developed by SpryMedia Ltd.

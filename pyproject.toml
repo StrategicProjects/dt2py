@@ -8,6 +8,7 @@ version = "0.1.2"
 description = "DataTables v2 for Shiny for Python — anywidget binding, Python port of the R DT2 package"
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE", "THIRD-PARTY-NOTICES"]
 requires-python = ">=3.9"
 authors = [
     { name = "André Leite", email = "leite@castlab.org" },

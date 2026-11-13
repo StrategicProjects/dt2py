@@ -1,0 +1,347 @@
+Copyright and license notices for the third-party code bundled in dt2
+=====================================================================
+
+The dt2 Python package (Python code and the anywidget adapter in js/) is
+copyright of the package authors and distributed under the MIT license (see
+LICENSE). It is a Python port of the R package DT2.
+
+dt2 is a binding: the table engine is third-party work. Rendering, ordering,
+searching, paging and every extension are done by DataTables, a JavaScript
+library developed by SpryMedia Ltd (https://datatables.net). The wheel and
+the sdist ship a pre-built bundle, src/dt2/static/index.js and index.css,
+produced with esbuild from the npm packages pinned in package-lock.json; it
+contains DataTables and the libraries listed below, unmodified apart from
+minification. Each of them remains the copyright of its authors and is used
+under its own license.
+
+dt2 is an independent project. It is not affiliated with, sponsored by or
+endorsed by SpryMedia Ltd or by any of the other projects listed here.
+
+Bundled components
+------------------
+
+component                 version license         copyright holder(s)
+---------                 ------- -------         -------------------
+DataTables                2.3.4   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables Buttons        3.2.4   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables ColReorder     2.1.1   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables ColumnControl  1.2.1   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables DateTime       1.6.0   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables FixedColumns   5.0.5   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables FixedHeader    4.0.3   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables KeyTable       2.12.1  MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables Responsive     3.0.6   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables RowGroup       1.6.0   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables RowReorder     1.5.0   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables Scroller       2.4.3   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables SearchBuilder  1.8.4   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables SearchPanes    2.3.5   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables Select         3.1.0   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+DataTables StateRestore   1.4.2   MIT             SpryMedia Ltd
+    in: src/dt2/static/index.js and index.css
+FileSaver.js              1.3.3   MIT             Eli Grey
+    in: src/dt2/static/index.js (part of Buttons)
+Lucide icons              -       ISC, parts MIT  Lucide Contributors; Cole Bemis (Feather)
+    in: src/dt2/static/index.js (part of ColumnControl)
+jQuery                    3.7.1   MIT             OpenJS Foundation and other contributors
+    in: src/dt2/static/index.js
+JSZip                     3.10.1  MIT OR GPL-3.0  Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
+    in: src/dt2/static/index.js
+pako                      1.x     MIT AND Zlib    Vitaly Puzrin and Andrei Tuputcyn; Jean-loup Gailly and Mark Adler (zlib)
+    in: src/dt2/static/index.js (part of JSZip)
+Moment.js                 2.30.1  MIT             JS Foundation and other contributors
+    in: src/dt2/static/index.js
+
+Versions are those in package-lock.json; holders and licenses were taken from
+the license banners that esbuild keeps at the end of index.js and index.css
+("Bundled license information") and from the license file of each upstream
+release. pdfmake and Bootstrap's own CSS/JS are not part of this bundle.
+
+JSZip is dual-licensed (MIT or GPL-3.0); it is used and redistributed here
+under the MIT license. Its distribution file (jszip.min.js) is a pre-built
+bundle that also contains pako, a JavaScript port of zlib (MIT, with the
+zlib license for the ported code), and the small npm modules JSZip depends
+on (lie, immediate, setimmediate, readable-stream and its helpers), which
+are MIT- or ISC-licensed.
+
+Notices
+-------
+
+DataTables and its extensions (SpryMedia Ltd)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Notice carried by the bundled file(s):
+
+    /*! DataTables 2.3.4
+     * © SpryMedia Ltd - datatables.net/license
+     */
+
+    (each extension file carries the same notice with its own name and
+    version, e.g. "Buttons for DataTables 3.2.4", "Select for DataTables 3.1.0")
+
+License of DataTables 2.3.4 (license.txt of the upstream release; the
+extensions use the same MIT terms, https://datatables.net/license/mit):
+
+    The MIT License (MIT)
+
+    Copyright (C) 2008-present, SpryMedia Ltd.
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+FileSaver.js 1.3.3 (inside the Buttons HTML5 export file)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Notice carried by the bundled file(s):
+
+     * FileSaver.js (1.3.3) - MIT license
+     * Copyright © 2016 Eli Grey - http://eligrey.com
+
+License of FileSaver.js 1.3.3 (LICENSE.md):
+
+    The MIT License
+
+    Copyright © 2016 [Eli Grey][1].
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+      [1]: http://eligrey.com
+
+Lucide icons (inside ColumnControl)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Notice carried by the bundled file(s):
+
+     * SVG icons: ISC License
+     * Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT).
+     * All other copyright (c) for Lucide are held by Lucide Contributors 2022.
+
+License of Lucide (LICENSE, https://github.com/lucide-icons/lucide):
+
+    ISC License
+
+    Copyright (c) 2026 Lucide Icons and Contributors
+
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted, provided that the above
+    copyright notice and this permission notice appear in all copies.
+
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+    WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+    ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+    ---
+
+    The following Lucide icons are derived from the Feather project:
+
+    airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out
+
+    The MIT License (MIT) (for the icons listed above)
+
+    Copyright (c) 2013-present Cole Bemis
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+jQuery 3.7.1
+~~~~~~~~~~~~
+
+Notice carried by the bundled file(s):
+
+    jQuery JavaScript Library v3.7.1
+    https://jquery.com/
+
+    Copyright OpenJS Foundation and other contributors
+    Released under the MIT license
+    https://jquery.org/license
+
+License of jQuery 3.7.1 (LICENSE.txt):
+
+    Copyright OpenJS Foundation and other contributors, https://openjsf.org/
+
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+JSZip 3.10.1
+~~~~~~~~~~~~
+
+Notice carried by the bundled file(s):
+
+    JSZip v3.10.1 - A JavaScript class for generating and reading zip files
+    <http://stuartk.com/jszip>
+
+    (c) 2009-2016 Stuart Knightley <stuart [at] stuartk.com>
+    Dual licenced under the MIT license or GPLv3. See https://raw.github.com/Stuk/jszip/main/LICENSE.markdown.
+
+    JSZip uses the library pako released under the MIT license :
+    https://github.com/nodeca/pako/blob/main/LICENSE
+
+License of JSZip 3.10.1 (LICENSE.markdown, MIT part; the GPLv3 alternative,
+not used here, is at https://www.gnu.org/licenses/gpl-3.0.txt):
+
+    JSZip is dual licensed. At your choice you may use it under the MIT license *or* the GPLv3
+    license.
+
+    The MIT License
+    ===============
+
+    Copyright (c) 2009-2016 Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+
+pako (inside JSZip)
+~~~~~~~~~~~~~~~~~~~
+
+License of pako 1.0 (LICENSE):
+
+    (The MIT License)
+
+    Copyright (C) 2014-2017 by Vitaly Puzrin and Andrei Tuputcyn
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+
+Notice in the source files of pako's zlib port (lib/zlib/*.js):
+
+    (C) 1995-2013 Jean-loup Gailly and Mark Adler
+    (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+
+    This software is provided 'as-is', without any express or implied
+    warranty. In no event will the authors be held liable for any damages
+    arising from the use of this software.
+
+    Permission is granted to anyone to use this software for any purpose,
+    including commercial applications, and to alter it and redistribute it
+    freely, subject to the following restrictions:
+
+    1. The origin of this software must not be misrepresented; you must not
+      claim that you wrote the original software. If you use this software
+      in a product, an acknowledgment in the product documentation would be
+      appreciated but is not required.
+    2. Altered source versions must be plainly marked as such, and must not be
+      misrepresented as being the original software.
+    3. This notice may not be removed or altered from any source distribution.
+
+Moment.js 2.30.1
+~~~~~~~~~~~~~~~~
+
+Notice carried by the bundled file(s):
+
+    //! moment.js
+    //! version : 2.30.1
+    //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
+    //! license : MIT
+    //! momentjs.com
+
+License of Moment.js 2.30.1 (LICENSE):
+
+    Copyright (c) JS Foundation and other contributors
+
+    Permission is hereby granted, free of charge, to any person
+    obtaining a copy of this software and associated documentation
+    files (the "Software"), to deal in the Software without
+    restriction, including without limitation the rights to use,
+    copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the
+    Software is furnished to do so, subject to the following
+    conditions:
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+    OTHER DEALINGS IN THE SOFTWARE.
